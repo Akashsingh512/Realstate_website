@@ -4,63 +4,303 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Camellias | Ultra-Luxury Residences</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gold: #C5A059;
+            --gold-dark: #A68545;
+            --black: #0A0A0A;
+            --dark-grey: #1A1A1A;
+            --white: #FFFFFF;
+            --beige: #F4F1EA;
+            --glass: rgba(255, 255, 255, 0.05);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { 
+            background-color: var(--black); 
+            color: var(--white); 
+            font-family: 'Montserrat', sans-serif; 
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, .luxury-font { font-family: 'Playfair Display', serif; }
+
+        /* --- Global Components --- */
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        .btn {
+            display: inline-block;
+            padding: 18px 35px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.4s ease;
+            font-size: 13px;
+            text-decoration: none;
+            text-align: center;
+        }
+        .btn-gold { background: var(--gold); color: var(--black); }
+        .btn-gold:hover { background: var(--white); transform: translateY(-3px); }
+        .btn-outline { border: 1px solid var(--gold); color: var(--gold); background: transparent; }
+        .btn-outline:hover { background: var(--gold); color: var(--black); }
+
+        section { padding: 100px 0; border-bottom: 1px solid rgba(197, 160, 89, 0.1); }
+
+        /* --- Hero Section --- */
+        .hero {
+            height: 100vh;
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
+                        url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1920&q=80') no-repeat center center/cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+        }
+        .hero-content h1 { font-size: clamp(3rem, 8vw, 5.5rem); margin-bottom: 15px; font-weight: 400; }
+        .hero-content p.subheadline { font-size: 1.2rem; letter-spacing: 4px; color: var(--gold); margin-bottom: 40px; text-transform: uppercase; }
+        .hero-highlights { display: flex; justify-content: center; gap: 30px; margin-bottom: 50px; font-weight: 300; color: rgba(255,255,255,0.7); flex-wrap: wrap; }
+        .hero-highlights span { border-right: 1px solid var(--gold); padding-right: 30px; }
+        .hero-highlights span:last-child { border: none; }
+
+        /* --- Overview --- */
+        .overview-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+        .overview-content h2 { font-size: 3rem; margin-bottom: 30px; }
+        .luxury-list { list-style: none; margin-top: 30px; }
+        .luxury-list li { margin-bottom: 15px; padding-left: 30px; position: relative; color: var(--beige); }
+        .luxury-list li::before { content: '◈'; position: absolute; left: 0; color: var(--gold); }
+
+        /* --- Residence Types --- */
+        .residence-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin-top: 50px; }
+        .residence-card { 
+            background: var(--dark-grey); 
+            padding: 50px 30px; 
+            text-align: center; 
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: 0.5s;
+        }
+        .residence-card:hover { border-color: var(--gold); transform: translateY(-10px); }
+        .residence-card h3 { font-size: 1.8rem; margin-bottom: 10px; color: var(--gold); }
+        .residence-card p { opacity: 0.7; margin-bottom: 30px; }
+
+        /* --- Amenities --- */
+        .amenities-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: rgba(197, 160, 89, 0.2); border: 1px solid rgba(197, 160, 89, 0.2); }
+        .amenity-item { background: var(--black); padding: 40px 20px; text-align: center; transition: 0.3s; }
+        .amenity-item:hover { background: var(--dark-grey); color: var(--gold); }
+
+        /* --- Location Map Placeholder --- */
+        .map-ui {
+            width: 100%; height: 400px; background: #222; 
+            border: 1px solid var(--gold); position: relative;
+            display: flex; align-items: center; justify-content: center;
+            background-image: radial-gradient(circle, #333 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+        .map-pin { color: var(--gold); text-align: center; }
+
+        /* --- Modal / Forms --- */
+        .modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9); display: none; z-index: 1000;
+            align-items: center; justify-content: center;
+        }
+        .form-box {
+            background: var(--dark-grey); padding: 50px; width: 100%; max-width: 500px;
+            border: 1px solid var(--gold); position: relative;
+        }
+        .form-box h2 { margin-bottom: 20px; text-align: center; color: var(--gold); }
+        input, select, textarea {
+            width: 100%; padding: 15px; margin-bottom: 15px;
+            background: transparent; border: 1px solid #444; color: white;
+            font-family: inherit;
+        }
+        input:focus { border-color: var(--gold); outline: none; }
+
+        /* --- Sticky Bar --- */
+        .sticky-bar {
+            position: fixed; bottom: 0; width: 100%; background: var(--black);
+            display: flex; border-top: 1px solid var(--gold); z-index: 900;
+        }
+        .sticky-item { flex: 1; text-align: center; padding: 15px; color: white; text-decoration: none; font-size: 12px; font-weight: 600; border-right: 1px solid rgba(197, 160, 89, 0.2); }
+        .sticky-item.wa { background: #25D366; color: white; border: none; }
+        .sticky-item.price { background: var(--gold); color: var(--black); border: none; }
+
+        /* --- Responsive --- */
+        @media (max-width: 768px) {
+            .overview-grid, .residence-grid, .amenities-grid { grid-template-columns: 1fr; }
+            .hero-highlights span { border: none; padding: 0; width: 100%; margin-bottom: 10px; }
+            section { padding: 60px 0; }
+            .form-box { padding: 30px; width: 90%; }
+        }
+    </style>
 </head>
 <body>
 
-    <header class="hero">
-        <div class="overlay"></div>
-        <div class="hero-content">
-            <p class="subtitle">A Legacy of Luxury</p>
+    <section class="hero">
+        <div class="hero-content container">
+            <p class="subheadline">Luxury Reimagined</p>
             <h1>The Camellias</h1>
-            <p class="tagline">Where Nature Meets Unmatched Elegance.</p>
-            <a href="#inquiry" class="cta-button">Schedule a Private Tour</a>
+            <div class="hero-highlights">
+                <span>4, 5 & 6 BHK Residences</span>
+                <span>Private Lift Lobby</span>
+                <span>Golf Course Views</span>
+                <span>Leed Platinum Certified</span>
+            </div>
+            <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+                <button class="btn btn-gold" onclick="openModal('Private Viewing')">Schedule Private Viewing</button>
+                <button class="btn btn-outline" onclick="openModal('Price Details')">Request Price Details</button>
+            </div>
         </div>
-    </header>
+    </section>
 
-    <section class="features">
+    <section id="overview">
+        <div class="container overview-grid">
+            <div class="overview-img">
+                <img src="https://images.unsplash.com/photo-1582407947304-fd86f028f716?auto=format&fit=crop&w=800&q=80" alt="Luxury Architecture" style="width:100%; filter: grayscale(0.5);">
+            </div>
+            <div class="overview-content">
+                <h2>A Landmark of Success</h2>
+                <p>Located on the prestigious Golf Course Road, The Camellias is a breathtaking architectural masterpiece designed for those who have arrived in life. It offers a seamless blend of modern design, unparalleled privacy, and world-class hospitality.</p>
+                <ul class="luxury-list">
+                    <li>Ultra-luxury residences with expansive layouts</li>
+                    <li>Surrounded by landscaped gardens and water features</li>
+                    <li>Exclusive clubhouse and wellness facilities</li>
+                    <li>Designed for a refined, global lifestyle</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section id="residences">
         <div class="container">
-            <div class="feature-card">
-                <h3>Architectural Icon</h3>
-                <p>Designed by Hafeez Contractor, a LEED Platinum certified masterpiece on Golf Course Road.</p>
-            </div>
-            <div class="feature-card">
-                <h3>The Club Life</h3>
-                <p>Access to India’s most expansive social club with gourmet dining and wellness centers.</p>
-            </div>
-            <div class="feature-card">
-                <h3>Panoramic Greens</h3>
-                <p>Breathtaking views of the DLF Golf and Country Club from your private wrap-around balcony.</p>
+            <h2 style="text-align: center; font-size: 3rem; margin-bottom: 50px;">The Collections</h2>
+            <div class="residence-grid">
+                <div class="residence-card">
+                    <h3>4 BHK</h3>
+                    <p>Approx. 7,000+ Sq. Ft.</p>
+                    <button class="btn btn-outline" onclick="openModal('4BHK Floor Plan')">Get Floor Plan</button>
+                </div>
+                <div class="residence-card" style="border-color: var(--gold);">
+                    <h3>5 BHK</h3>
+                    <p>Approx. 9,000+ Sq. Ft.</p>
+                    <button class="btn btn-gold" onclick="openModal('5BHK Floor Plan')">Get Floor Plan</button>
+                </div>
+                <div class="residence-card">
+                    <h3>Penthouses</h3>
+                    <p>Limited Edition Luxury</p>
+                    <button class="btn btn-outline" onclick="openModal('Penthouse Floor Plan')">Get Floor Plan</button>
+                </div>
             </div>
         </div>
     </section>
 
-    <section id="inquiry" class="lead-section">
-        <div class="form-container">
-            <h2>Own the Address</h2>
-            <p>Register your interest for an exclusive walkthrough of our 4 & 5 BHK residences.</p>
+    <section id="amenities">
+        <div class="container">
+            <h2 style="text-align: center; font-size: 3rem; margin-bottom: 50px;">Curated Experiences</h2>
+            <div class="amenities-grid">
+                <div class="amenity-item">Spa & Wellness</div>
+                <div class="amenity-item">Luxury Clubhouse</div>
+                <div class="amenity-item">Swimming Pool</div>
+                <div class="amenity-item">Fitness Centre</div>
+                <div class="amenity-item">Private Dining</div>
+                <div class="amenity-item">Tennis Courts</div>
+                <div class="amenity-item">Landscaped Gardens</div>
+                <div class="amenity-item">Concierge 24/7</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="location">
+        <div class="container">
+            <div class="overview-grid">
+                <div class="overview-content">
+                    <h2>Unrivaled Connectivity</h2>
+                    <ul class="luxury-list">
+                        <li>Prime Golf Course Road Location</li>
+                        <li>30 Minutes to IGI Airport</li>
+                        <li>5 Minutes to Cyber Hub</li>
+                        <li>Proximity to Top International Schools</li>
+                    </ul>
+                </div>
+                <div class="map-ui">
+                    <div class="map-pin">
+                        <span style="font-size: 40px;">📍</span>
+                        <p class="luxury-font">Sector 42, Gurugram</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" style="background: var(--dark-grey);">
+        <div class="container" style="text-align: center; max-width: 600px;">
+            <h2 style="font-size: 3.5rem; margin-bottom: 10px;">Enquire Now</h2>
+            <p style="color: var(--gold); margin-bottom: 40px; letter-spacing: 2px;">SECURE YOUR PRIVATE VIEWING</p>
             
-            <form id="leadForm">
-                <div class="input-group">
-                    <input type="text" id="name" placeholder="Full Name" required>
-                </div>
-                <div class="input-group">
-                    <input type="email" id="email" placeholder="Email Address" required>
-                </div>
-                <div class="input-group">
-                    <input type="tel" id="phone" placeholder="Phone Number" required>
-                </div>
-                <button type="submit" class="submit-btn">Request Brochure</button>
+            <form action="#" method="POST">
+                <input type="text" placeholder="Full Name" required>
+                <input type="email" placeholder="Email Address" required>
+                <input type="tel" placeholder="Phone Number" required>
+                <select required>
+                    <option value="" disabled selected>Preferred Configuration</option>
+                    <option>4 BHK</option>
+                    <option>5 BHK</option>
+                    <option>Penthouse</option>
+                </select>
+                <button type="submit" class="btn btn-gold" style="width: 100%; margin-top: 20px;">Request Call Back</button>
             </form>
-            <div id="formFeedback" class="hidden">Thank you. Our luxury consultant will contact you shortly.</div>
+            
+            <div style="margin-top: 30px; display: flex; justify-content: center; gap: 20px;">
+                <a href="https://wa.me/910000000000" class="btn btn-outline" style="flex:1;">WhatsApp</a>
+            </div>
         </div>
     </section>
 
-    <footer>
-        <p>&copy; 2026 DLF The Camellias. Reserved for the Extraordinary.</p>
-    </footer>
+    <div class="sticky-bar">
+        <a href="tel:+910000000000" class="sticky-item">CALL NOW</a>
+        <a href="https://wa.me/910000000000" class="sticky-item wa">WHATSAPP</a>
+        <a href="javascript:void(0)" class="sticky-item price" onclick="openModal('Sticky Get Price')">GET PRICE</a>
+    </div>
 
-    <script src="script.js"></script>
+    <div id="leadModal" class="modal">
+        <div class="form-box">
+            <span onclick="closeModal()" style="position:absolute; top:20px; right:20px; cursor:pointer; font-size:24px;">&times;</span>
+            <h2 id="modalTitle">Register Interest</h2>
+            <form>
+                <input type="text" placeholder="Name" required>
+                <input type="tel" placeholder="Phone" required>
+                <input type="email" placeholder="Email" required>
+                <select>
+                    <option>4 BHK</option>
+                    <option>5 BHK</option>
+                    <option>Penthouse</option>
+                </select>
+                <button type="submit" class="btn btn-gold" style="width: 100%;">Submit Inquiry</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const modal = document.getElementById('leadModal');
+        
+        function openModal(title) {
+            document.getElementById('modalTitle').innerText = title;
+            modal.style.display = 'flex';
+        }
+
+        function closeModal() {
+            modal.style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+    </script>
 </body>
 </html>
